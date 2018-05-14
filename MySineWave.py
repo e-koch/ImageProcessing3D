@@ -9,11 +9,9 @@ import matplotlib.pyplot as plt
 
 def MySineWave(wavelength):
     import numpy as np
-    from numpy import pi
-
-    x = np.linspace(-2*pi,2*pi,100)
-
-    f = np.sin(2*pi*x/wavelength)
+    
+    x = np.linspace(-2*np.pi,2*np.pi,100)
+    f = np.sin(2*np.pi*x/wavelength)
 
     plt.plot(x,f)
     plt.show()
