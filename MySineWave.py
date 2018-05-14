@@ -5,6 +5,7 @@ Created on Mon May 14 14:20:03 2018
 
 @author: haswani
 """
+import matplotlib.pyplot as plt
 
 def MySineWave(wavelength):
     import numpy as np
@@ -14,7 +15,6 @@ def MySineWave(wavelength):
 
     f = np.sin(2*pi*x/wavelength)
 
-    import matplotlib.pyplot as plt
     plt.plot(x,f)
     plt.show()
     
