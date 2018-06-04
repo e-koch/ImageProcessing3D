@@ -5,6 +5,7 @@ Created on Tue May 29 14:20:33 2018
 
 @author: haswani
 """
+
 import numpy as np
 from skimage.morphology import skeletonize,skeletonize_3d
 
@@ -13,3 +14,17 @@ fil = np.array(x**2 + y**2 < 3).astype(np.uint8)
 print(fil)
 dskel = skeletonize_3d(fil)
 print(dskel)
+
+
+#Visualisation of cylinder
+out = np.where(fil)
+#np.where : Return elements, either from x or y, depending on condition.
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(out[0],out[1],out[2],'r,')
+
+#Visualisation of skeleton 
+out = np.where(dskel)
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(out[0],out[1],out[2],'r,')
