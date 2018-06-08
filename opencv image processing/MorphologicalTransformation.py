@@ -31,6 +31,8 @@ while(1):
 
     cv2.imshow('Original',frame)
     cv2.imshow('Mask',mask)
+    cv2.imshow('Erosion',erosion)
+    cv2.imshow('Dilation',dilation)
     cv2.imshow('Opening',opening)
     cv2.imshow('Closing',closing)
 
