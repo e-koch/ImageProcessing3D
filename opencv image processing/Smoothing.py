@@ -17,7 +17,12 @@ while(1):
     smoothed = cv2.filter2D(res,-1,kernel)
     cv2.imshow('Original',frame)
     cv2.imshow('Averaging',smoothed)
-
+    
+    blur = cv2.GaussianBlur(res,(15,15),0)
+    cv2.imshow('Gaussian Blurring',blur)
+    median = cv2.medianBlur(res,15)
+    cv2.imshow('Median Blur',median)
+    
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
         break
