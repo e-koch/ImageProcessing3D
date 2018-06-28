@@ -96,7 +96,7 @@ for j in subgraphlist:
 #            
             minimum = 30 #just a large number 
             for i in endPoints:
-                if nx.has_path(H,k,i):
+                if nx.has_path(H,k,i) and H.degree(k)>2:
                     
                     p = nx.shortest_path(H,source=k,target=i)
                     print("Path :")
