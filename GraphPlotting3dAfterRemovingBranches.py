@@ -166,16 +166,45 @@ for j in subgraphlist:
                     print("removed")
             #print(cutnodes) 
 
+
+
 #Removing nodes                 
     if nx.number_of_nodes(H) <= parameter:
         print("removing nodes")
         print(H.nodes())
         G.remove_nodes_from(H.nodes())
+
+print("Number of nodes After removing Subgraphs < parameter length:")
+print(nx.number_of_nodes(G))
                             
+#removing Subgraphs afer removing edges
+
+sub_graphs2 = nx.connected_component_subgraphs(G)
+
+subgraphlist2 = []
+
+for i, sg in enumerate(sub_graphs2):
+    #print("subgraph {} has {} nodes".format(i, sg.number_of_nodes()))
+    #print("\tNodes:", sg.nodes())
+    subgraphlist2.append(sg.nodes())
+
+for j in subgraphlist2:
+    H2 = nx.Graph(G.subgraph(j)) 
+    if nx.number_of_nodes(H2) <= parameter:
+        print("removing nodes 2")
+        print(H.nodes())
+        G.remove_nodes_from(H2.nodes())    
+    
+
+
+      
+##        
 
                 
                     
 K = nx.Graph(G.subgraph(L))
+
+
 
 new_posns = {}
 for node in K.node:
