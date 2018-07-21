@@ -14,8 +14,8 @@ from astropy.io import fits
 from skimage.morphology import binary_opening,binary_dilation,binary_erosion,closing,dilation,opening,ball,remove_small_holes
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import imageio as iio
-from skan import draw
+# import imageio as iio
+# from skan import draw
 
 cube = fits.getdata('ngc3627_co21_12m+7m+tp_pbcorr_round_k_correct_mask.fits')
 
@@ -49,7 +49,7 @@ pixel_graph1, coordinates1, degrees1 = csr.skeleton_to_csgraph(subcube)
 #print(pixel_graph1.paths_list())
 
 nodes = range(15,75)
-G = nx.from_scipy_sparse_matrix(pixel_graph1) 
+G = nx.from_scipy_sparse_matrix(pixel_graph1)
 
 for node in G.node:
     G.node[node]['pos'] = coordinates1[node]
@@ -92,7 +92,7 @@ nodesToBeRemoved = []
 for j in subgraphlist:
     H = nx.Graph(G.subgraph(j)) # for all the subgraphs
 #print(list(itertools.chain(H.nx.Graph.edges_iter())))
-    
+
     #Removing subgraphs with less then parameter length (5)
 #    if nx.number_of_nodes(H) <= parameter:
 #       print("cleared")
@@ -102,10 +102,10 @@ for j in subgraphlist:
 #        print("Hey")
 #        print(H.nodes())
 #        G.remove_nodes_from(H.nodes())
-#    
-    
-    
-    
+#
+
+
+
 #for n in H.nodes:
 #    print(G.degree(n))
     endPoints = []
@@ -126,11 +126,11 @@ for j in subgraphlist:
 #            p = nx.shortest_path(H,source=k,target=endPoints[0])
 #            print("Path :")
 #            print(len(p))
-#            
-          #  minimum = 30 #just a large number 
+#
+          #  minimum = 30 #just a large number
             for i in endPoints:
                 if nx.has_path(H,k,i) and H.degree(k) > 2:
-                    
+
                     p = nx.shortest_path(H,source=k,target=i)
           #          print("Path :")
            #         print(i)
@@ -141,8 +141,8 @@ for j in subgraphlist:
                         cutnode = p[1]
             #            print("TO cut: ")
              #           print(cutnode)
-            
-            
+
+
                         if H.has_edge(k, cutnode):
                             H.remove_edge(k,cutnode)
               #              print("SubGraph Number")
@@ -151,17 +151,17 @@ for j in subgraphlist:
                  #           print(k, cutnode)
                             cutnodes.append(cutnode)
      #REmoving Subgraph less then parameter length(here 5nodes)
-        
-        
+
+
             for n in cutnodes:
                 if G.has_edge(k,n):
                     G.remove_edge(k,n)
                     print("removed")
-            #print(cutnodes) 
+            #print(cutnodes)
 
 
 
-#Removing nodes                 
+#Removing nodes
     if nx.number_of_nodes(H) <= parameter:
         print("removing nodes")
         print(H.nodes())
@@ -169,7 +169,7 @@ for j in subgraphlist:
 
 print("Number of nodes After removing Subgraphs < parameter length:")
 print(nx.number_of_nodes(G))
-                            
+
 #removing Subgraphs afer removing edges
 
 sub_graphs2 = nx.connected_component_subgraphs(G)
@@ -182,19 +182,19 @@ for i, sg in enumerate(sub_graphs2):
     subgraphlist2.append(sg.nodes())
 
 for j in subgraphlist2:
-    H2 = nx.Graph(G.subgraph(j)) 
+    H2 = nx.Graph(G.subgraph(j))
     if nx.number_of_nodes(H2) <= parameter:
         print("removing nodes 2")
         print(H.nodes())
-        G.remove_nodes_from(H2.nodes())    
-    
+        G.remove_nodes_from(H2.nodes())
 
 
-      
-##        
 
-                
-                    
+
+##
+
+
+
 K = nx.Graph(G.subgraph(L))
 
 
@@ -213,7 +213,7 @@ def network_plot_3D(G, angle, save=False):
 
     # Get node positions
     pos = nx.get_node_attributes(G, 'pos')
-    
+
     # Get number of nodes
  #   n = G.number_of_nodes()
 
@@ -221,23 +221,23 @@ def network_plot_3D(G, angle, save=False):
     edge_max = max([G.degree(i) for i in G.nodes])
 
     # Define color range proportional to number of edges adjacent to a single node
-    colors = [plt.cm.plasma(G.degree(i)/edge_max) for i in G.nodes] 
+    colors = [plt.cm.plasma(G.degree(i)/edge_max) for i in G.nodes]
 
     # 3D network plot
     with plt.style.context(('ggplot')):
-        
+
         fig = plt.figure(figsize=(10,7))
         ax = Axes3D(fig)
-        
+
         # Loop on the pos dictionary to extract the x,y,z coordinates of each node
         for i, (key, value) in enumerate(pos.items()):
             xi = value[0]
             yi = value[1]
             zi = value[2]
-            
+
             # Scatter plot
             ax.scatter(xi, yi, zi, c=colors[i], s=20+20*G.degree(key), edgecolors='k', alpha=0.7)
-        
+
         # Loop on the list of edges to get the x,y,z, coordinates of the connected nodes
         # Those two points are the extrema of the line to be plotted
         for i,j in enumerate(G.edges()):
@@ -245,10 +245,10 @@ def network_plot_3D(G, angle, save=False):
             x = np.array((pos[j[0]][0], pos[j[1]][0]))
             y = np.array((pos[j[0]][1], pos[j[1]][1]))
             z = np.array((pos[j[0]][2], pos[j[1]][2]))
-        
+
         # Plot the connecting lines
             ax.plot(x, y, z, c='black', alpha=0.5)
-    
+
     # Set the initial view
     ax.view_init(30, angle)
 
@@ -260,20 +260,20 @@ def network_plot_3D(G, angle, save=False):
         plt.close('all')
     else:
         plt.show()
-    
+
     return
 
 #def generate_random_3Dgraph(n_nodes, radius, seed=None):
-# 
+#
 #    if seed is not None:
 #        random.seed(seed)
-#    
+#
 #    # Generate a dict of positions
 #    pos = {i: (random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)) for i in range(n_nodes)}
-#    
+#
 #    # Create random 3D network
 #    G = nx.random_geometric_graph(n_nodes, radius, pos=pos)
-# 
+#
 #    return G
 #
 #n=200
@@ -283,9 +283,11 @@ def network_plot_3D(G, angle, save=False):
 ##FINDING VELOCITY AND SPATIAL LENGTH
 node_number = []
 cordinates = []
-spatial_length = [] 
-veloctiy_length = [] 
+spatial_length = []
+veloctiy_length = []
 #will zip them all together in end
+
+print(argh)
 
 sub_graphs3 = nx.connected_component_subgraphs(G)
 #extracting all subgraphs to work on each subgraphs individually
@@ -306,7 +308,7 @@ test = []
 #test is used to test functionalities of python
 
 for j in subgraphlist3:
-    H3 = nx.Graph(G.subgraph(j)) 
+    H3 = nx.Graph(G.subgraph(j))
     endPoints = [] #endpoints of each subgraph
     junction = []   #junction of each subgraph
     for n in H3.nodes:
@@ -316,38 +318,95 @@ for j in subgraphlist3:
             junction.append(n)
         #else:
             #print("others")
-            
-    count = 0     
-    for node in H3.node:
-        if node in endPoints: #check if selected node is in the list of endpoitns
-            print("Start")
-            neighbor_node = H3.neighbors(node)
-            #print(neighbor_node)
-            
-            if neighbor_node not in endPoints and neighbor_node not in junction:
-                pointer_node = H3.node[node]['pos']
-                print("Neighbour test")
-                #next_node = H3.node[neighbor_node]['pos']
-                #print(H3.node[neighbor_node]['pos'])
-                spatialDistanceBetweenNodes = 0
-                #velocityLengthBetweenNodes = abs(next_node - pointer_node)
-            
-        test.append(H3.node[node]['pos'])
-        #print(test[0][0][0])
-        print(node)
-        print(test[count])
-        test_list = test[count]
-        count = count + 1
-        print(test_list[0])
+
+    if len(endpoints) == 0:
+        raise ValueError("Found no end points.")
 
 
-        
+    # It will be useful to come up with a naming scheme for the branches
+    # for additional analysis steps
+    spatial_lengths = []
+    velocity_lengths = []
+
+    used_ends = []
+
+    for end in endPoints:
+
+        # Check whether any branches need to be traversed
+        if len(list(set(endPoints) - set(used_ends))) == 0:
+            break
+
+        used_ends.append(end)
+
+        # Iterate through nodes until hitting a junction or end point
+        spat_length = 0.
+        vel_length = 0.
+
+        curr_node = end
+        used_nodes = [end]
+
+        # Traverse along the path until hitting a junction or end
+        while True:
+            neighbors = list(H3.neighbors(curr_node))
+
+            # Find the new node
+            if len(neighbors) > 1:
+                # Remove previously visited nodes
+                neighbors = list(set(neighbors) - set(used_nodes))
+
+            # Are there cases where there will still be multiple left?
+            # I don't think so... Those should be junctions.
+            neighbour = neighbors[0]
+
+            # Find neighbour pixel position and update the lengths
+
+            # Check for stopping criterion if the next node is an end point
+            # or junction
+            if neighbour in endPoints:
+                # Setup to skip that end point
+                used_ends.append(neighbour)
+                break
+            elif neighbour in junction:
+                # End on junctions
+                break
+            else:
+                # Update along a branch
+                curr_node = neighbour
+
+        end_ct += 1
+
+
+    # count = 0
+    # for node in H3.node:
+    #     if node in endPoints: #check if selected node is in the list of endpoitns
+    #         print("Start")
+    #         neighbor_node = H3.neighbors(node)
+    #         #print(neighbor_node)
+
+    #         if neighbor_node not in endPoints and neighbor_node not in junction:
+    #             pointer_node = H3.node[node]['pos']
+    #             print("Neighbour test")
+    #             #next_node = H3.node[neighbor_node]['pos']
+    #             #print(H3.node[neighbor_node]['pos'])
+    #             spatialDistanceBetweenNodes = 0
+    #             #velocityLengthBetweenNodes = abs(next_node - pointer_node)
+
+    #     test.append(H3.node[node]['pos'])
+    #     #print(test[0][0][0])
+    #     print(node)
+    #     print(test[count])
+    #     test_list = test[count]
+    #     count = count + 1
+    #     print(test_list[0])
+
+
+
 #print(endPoints)
 
 
 #nx.draw(K, with_labels=True)
 
-#starting with 20 
+#starting with 20
 
 
 
