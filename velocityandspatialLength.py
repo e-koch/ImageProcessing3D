@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jul 12 14:36:16 2018
+Created on Mon Jul 23 15:00:53 2018
 
 @author: haswani
 """
@@ -287,7 +287,7 @@ spatial_length = []
 veloctiy_length = []
 #will zip them all together in end
 
-print(argh)
+#print(argh)
 
 sub_graphs3 = nx.connected_component_subgraphs(G)
 #extracting all subgraphs to work on each subgraphs individually
@@ -319,14 +319,14 @@ for j in subgraphlist3:
         #else:
             #print("others")
 
-    if len(endpoints) == 0:
+    if len(endPoints) == 0:
         raise ValueError("Found no end points.")
 
 
     # It will be useful to come up with a naming scheme for the branches
     # for additional analysis steps
-    spatial_lengths = []
-    velocity_lengths = []
+ #   spatial_lengths = []
+    #velocity_lengths = []
 
     used_ends = []
 
@@ -343,10 +343,18 @@ for j in subgraphlist3:
         vel_length = 0.
 
         curr_node = end
-        used_nodes = [end]
+        used_nodes = []
+        
+        ##
+        print("EndPoint coordinate")
+        pointer_node = H3.node[curr_node]['pos']
+        print(pointer_node[0])
+                
 
+            
         # Traverse along the path until hitting a junction or end
         while True:
+            print("In loop")
             neighbors = list(H3.neighbors(curr_node))
 
             # Find the new node
@@ -357,7 +365,10 @@ for j in subgraphlist3:
             # Are there cases where there will still be multiple left?
             # I don't think so... Those should be junctions.
             neighbour = neighbors[0]
-
+            next_node = H3.node[neighbour]['pos']
+            print("Neighbour Pixel ")
+            print(next_node)
+            
             # Find neighbour pixel position and update the lengths
 
             # Check for stopping criterion if the next node is an end point
@@ -365,15 +376,19 @@ for j in subgraphlist3:
             if neighbour in endPoints:
                 # Setup to skip that end point
                 used_ends.append(neighbour)
+                print("broke")
                 break
             elif neighbour in junction:
                 # End on junctions
+                print("broke")
                 break
             else:
                 # Update along a branch
+                ##me 
+                used_nodes.append(curr_node)
                 curr_node = neighbour
 
-        end_ct += 1
+     #   end_ct += 1
 
 
     # count = 0
